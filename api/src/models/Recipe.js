@@ -35,4 +35,3 @@ module.exports = (sequelize) => {
     timestamp: false
   });
 };
-

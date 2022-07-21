@@ -247,4 +247,3 @@ router.get('/diets', async (req, res, next) =>{
 })
 
 module.exports = router;
-
