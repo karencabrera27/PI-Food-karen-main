@@ -59,6 +59,33 @@ export default function rootReducer(state = initialState, action){
                 ...state,
                 recipes: sortArr
             }
+        case 'ORBER_BY_HEALTH_LEVEL':
+            const sortAr = action.payload === 'asc' ? state.recipes.sort(function(a, b){
+                // a.name = recipes.names
+                if(a.healthLevel > b.healthLevel){
+                    return 1
+                }
+                if(b.healthLevel > a.healthLevel){
+                    return -1
+                }
+                // en el caso que sean iguales los deja como están 
+                return 0
+            }) :
+            state.recipes.sort(function(a, b){
+                // a.name = recipes.names
+                if(a.healthLevel > b.healthLevel){
+                    return -1
+                }
+                if(b.healthLevel > a.healthLevel){
+                    return 1
+                }
+                // en el caso que sean iguales los deja como están 
+                return 0
+            })
+            return{
+                ...state,
+                recipes: sortAr
+            }
         default:
             return {...state}
     }

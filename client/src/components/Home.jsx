@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // // importamos actions
-import { getRecipes, filterRecipesByDiets, filterCreated, orderByName } from "../actions";
+import { getRecipes, filterRecipesByDiets, filterCreated, orderByName, orderByHealthLevel } from "../actions";
 
 // // importacion para renderizar
 import { Link } from "react-router-dom";
@@ -74,10 +74,18 @@ export default function Home(){
     function handleFilterCreated(e){
         dispatch(filterCreated(e.target.value))
     }
-    // funciíon ordenamiento asc/desc
+    // función ordenamiento alfabético asc/desc 
     function handleSort(e){
         e.preventDefault()
         dispatch(orderByName(e.target.value))
+        setCurrentPage(1) // para que ordene la primera página 
+        setOrden(`Ordenado ${e.target.value}`)
+    }
+
+    // funciíon ordenamiento asc/desc por healthLevel
+    function handleSortHealthLevel(e){
+        e.preventDefault()
+        dispatch(orderByHealthLevel(e.target.value))
         setCurrentPage(1) // para que ordene la primera página 
         setOrden(`Ordenado ${e.target.value}`)
     }
@@ -93,7 +101,13 @@ export default function Home(){
             </div>
             <div>
                 <select name="Asc/Desc" id="" onChange={e => handleSort(e)}>
-                    <option value="all">Asc/Desc</option>
+                    <option value="all">Orden alfabético</option>
+                    <option value="asc">Ascendente</option>
+                    <option value="desc">Descendente</option>
+                </select>
+
+                <select name="Asc/Desc" id="" onChange={e => handleSortHealthLevel(e)}>
+                    <option value="all">Nivel de salud</option>
                     <option value="asc">Ascendente</option>
                     <option value="desc">Descendente</option>
                 </select>

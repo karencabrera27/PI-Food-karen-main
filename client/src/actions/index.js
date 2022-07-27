@@ -46,6 +46,13 @@ export function orderByName(payload){
     }
 }
 
+export function orderByHealthLevel(payload){
+    return{
+        type: 'ORBER_BY_HEALTH_LEVEL',
+        payload
+    }
+}
+
 //     return async function(dispatch){
 // //     //     // creo una variable la cual tiene la ruta del get para obtener todas las recetas
 // //     //     // aca sucede toda la conexión entre el front y el back
