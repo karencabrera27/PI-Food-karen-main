@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // // importamos actions
-import { getRecipes, filterRecipesByDiets, filterCreated } from "../actions";
+import { getRecipes, filterRecipesByDiets, filterCreated, orderByName } from "../actions";
 
 // // importacion para renderizar
 import { Link } from "react-router-dom";
@@ -24,6 +24,9 @@ export default function Home(){
 
     // esta const trae todo lo que esta en el estado de recipes
     const allRecipes = useSelector((state) => state.recipes);
+
+    // definición de estado para ordenamiento
+    const [orden, setOrden] = useState('');
 
     // definicion de estados locales
     const [ currentPage, setCurrentPage ] = useState(1);
@@ -71,6 +74,13 @@ export default function Home(){
     function handleFilterCreated(e){
         dispatch(filterCreated(e.target.value))
     }
+    // funciíon ordenamiento asc/desc
+    function handleSort(e){
+        e.preventDefault()
+        dispatch(orderByName(e.target.value))
+        setCurrentPage(1) // para que ordene la primera página 
+        setOrden(`Ordenado ${e.target.value}`)
+    }
 
     return (
         <React.Fragment>
@@ -82,9 +92,9 @@ export default function Home(){
                 <button onClick={e => handleClick(e)}>Volver a cargar recetas</button>
             </div>
             <div>
-                <select name="Asc/Desc" id="">
+                <select name="Asc/Desc" id="" onChange={e => handleSort(e)}>
                     <option value="all">Asc/Desc</option>
-                    <option value="asc">Asecendente</option>
+                    <option value="asc">Ascendente</option>
                     <option value="desc">Descendente</option>
                 </select>
 

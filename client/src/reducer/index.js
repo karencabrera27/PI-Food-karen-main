@@ -31,6 +31,34 @@ export default function rootReducer(state = initialState, action){
                 ...state,
                 recipes: action.payload === 'all' ? state.copyAllRecipes : createdFilter
             }
+        case 'ORDER_BY_NAME':
+            const sortArr = action.payload === 'asc' ? state.recipes.sort(function(a, b){
+                // a.name = recipes.names
+                if(a.name > b.name){
+                    return 1
+                }
+                if(b.name > a.name){
+                    return -1
+                }
+                // en el caso que sean iguales los deja como están 
+                return 0
+            }) :
+            state.recipes.sort(function(a, b){
+                // a.name = recipes.names
+                if(a.name > b.name){
+                    return -1
+                }
+                if(b.name > a.name){
+                    return 1
+                }
+                // en el caso que sean iguales los deja como están 
+                return 0
+            })
+
+            return{
+                ...state,
+                recipes: sortArr
+            }
         default:
             return {...state}
     }

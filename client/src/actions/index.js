@@ -39,6 +39,13 @@ export function filterCreated(payload){
     }
 }
 
+export function orderByName(payload){
+    return {
+        type: 'ORDER_BY_NAME',
+        payload
+    }
+}
+
 //     return async function(dispatch){
 // //     //     // creo una variable la cual tiene la ruta del get para obtener todas las recetas
 // //     //     // aca sucede toda la conexión entre el front y el back
