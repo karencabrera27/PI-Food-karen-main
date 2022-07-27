@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export const GET_RECIPES = "GET_RECIPES";
 export const FILTER_BY_DIETS = "FILTER_BY_DIETS";
+export const FILTER_CREATED = "FILTER_CREATED";
 
 // Obtener todas las dietas
 export function getRecipes(){
@@ -25,6 +26,15 @@ export function filterRecipesByDiets(payload){
     console.log(payload)
     return{
         type: 'FILTER_BY_DIETS',
+        payload
+    }
+}
+
+// Filtro por recetas creadas
+
+export function filterCreated(payload){
+    return {
+        type: 'FILTER_CREATED',
         payload
     }
 }

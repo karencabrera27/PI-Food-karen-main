@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // // importamos actions
-import { getRecipes, filterRecipesByDiets } from "../actions";
+import { getRecipes, filterRecipesByDiets, filterCreated } from "../actions";
 
 // // importacion para renderizar
 import { Link } from "react-router-dom";
@@ -67,6 +67,11 @@ export default function Home(){
         dispatch(filterRecipesByDiets(e.target.value))
     }
 
+    // función filtro recetas creadas
+    function handleFilterCreated(e){
+        dispatch(filterCreated(e.target.value))
+    }
+
     return (
         <React.Fragment>
         <div>
@@ -99,7 +104,7 @@ export default function Home(){
                     <option value="ketogenic">Ketogenic</option>
                 </select>
 
-                <select name="" id="">
+                <select name="" id="" onChange={e => handleFilterCreated(e)}>
                     <option value="all">Todas las recetas de la DB</option>
                     <option value="current">Existentes</option>
                     <option value="created">Creadas</option>

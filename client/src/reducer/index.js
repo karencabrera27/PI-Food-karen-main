@@ -23,6 +23,14 @@ export default function rootReducer(state = initialState, action){
                 ...state,
                 recipes: dietFilter
             }
+        case 'FILTER_CREATED':
+            const allrecipes = state.copyAllRecipes
+            const createdFilter = action.payload === 'created' ? allrecipes.filter( e => e.createdInDb) : allrecipes.filter(e => !e.createdInDb)
+
+            return{
+                ...state,
+                recipes: action.payload === 'all' ? state.copyAllRecipes : createdFilter
+            }
         default:
             return {...state}
     }
