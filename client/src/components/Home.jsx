@@ -3,13 +3,19 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // // importamos actions
-import { getRecipes } from "../actions";
+import { getRecipes, filterRecipesByDiets } from "../actions";
 
 // // importacion para renderizar
 import { Link } from "react-router-dom";
 
 // // importo cards
 import Card from "./Cards";
+
+// importo componente paginado
+import Paginado from "./Pagination";
+
+// importacion css
+import home from './cssComponents/home.css';
 
 export default function Home(){
     // declaro la constante dispatch y le pasamos el useDispatch
@@ -18,6 +24,22 @@ export default function Home(){
 
     // esta const trae todo lo que esta en el estado de recipes
     const allRecipes = useSelector((state) => state.recipes);
+
+    // definicion de estados locales
+    const [ currentPage, setCurrentPage ] = useState(1);
+    const [ recipesPerPage , setRecipesPerPage] =  useState(9)
+
+    // indices
+
+    const indexLastRecipe = currentPage * recipesPerPage //9
+    const indexFirstRecipe = indexLastRecipe - recipesPerPage // 0
+
+    const currentRecipes = allRecipes.slice(indexFirstRecipe, indexLastRecipe);
+
+    // paginado
+    const paginado = (pageNumber) => {
+        setCurrentPage(pageNumber)
+    }
 
     // traemos las recetas del estado cuando los componentes se montan
 
@@ -39,8 +61,14 @@ export default function Home(){
         // esto resetea
         dispatch(getRecipes());
     }
+    // función filtro por dietas
+    function handleFilterDiets(e){
+        // el e.target.value es lo mismo que el payload, es decir cada una de las opciones
+        dispatch(filterRecipesByDiets(e.target.value))
+    }
 
     return (
+        <React.Fragment>
         <div>
             <div>
                 <h1>Henry Food</h1>
@@ -55,7 +83,7 @@ export default function Home(){
                     <option value="desc">Descendente</option>
                 </select>
 
-                <select name="" id="">
+                <select name="" id="" onChange={e => handleFilterDiets(e)} className={home.cardRecipe}>
                     {/* el value es lo mismo que el e.target.value */}
                     <option value="all">Dietas</option>
                     <option value="gluten free">Gluten free</option>
@@ -76,9 +104,15 @@ export default function Home(){
                     <option value="current">Existentes</option>
                     <option value="created">Creadas</option>
                 </select>
+
+                <Paginado
+                    recipesPerPage = { recipesPerPage }
+                    allRecipes = {allRecipes.length}
+                    paginado = {paginado}
+                />
             
                 {
-                    allRecipes?.map((e) => {
+                    currentRecipes?.map((e) => {
                         return(
                             <fragment>
                                 <Link to={"/home/" + e.id}>
@@ -91,5 +125,6 @@ export default function Home(){
 
             </div>
         </div>
+        </React.Fragment>
     )
 }
