@@ -2,7 +2,9 @@
 const initialState = {
 //     // tiene el estado de las recetas
     recipes : [],
-    copyAllRecipes: []
+    copyAllRecipes: [],
+    diets : [],
+    detail: []
 }
 // 
 
@@ -16,6 +18,26 @@ export default function rootReducer(state = initialState, action){
                 recipes: action.payload,
                 copyAllRecipes: action.payload
             }
+        case 'SEARCH_RECIPE':
+            return{
+                ...state,
+                recipes: action.payload
+            }
+        case 'GET_DETAILS':
+            return{
+                ...state,
+                detail: action.payload
+            }
+        case 'POST_RECIPES':
+            return{
+                ...state
+            }
+        
+        case 'GET_DIETS':
+            return{
+                ...state,
+                diets: action.payload
+            }
         case 'FILTER_BY_DIETS':
             const allRecipes = state.copyAllRecipes;
             const dietFilter = action.payload === "all" ? allRecipes : allRecipes.filter(e => e.diet?.some(d => d === action.payload))
@@ -23,6 +45,7 @@ export default function rootReducer(state = initialState, action){
                 ...state,
                 recipes: dietFilter
             }
+        
         case 'FILTER_CREATED':
             const allrecipes = state.copyAllRecipes
             const createdFilter = action.payload === 'created' ? allrecipes.filter( e => e.createdInDb) : allrecipes.filter(e => !e.createdInDb)
@@ -86,6 +109,7 @@ export default function rootReducer(state = initialState, action){
                 ...state,
                 recipes: sortAr
             }
+        
         default:
             return {...state}
     }

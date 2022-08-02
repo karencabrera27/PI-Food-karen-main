@@ -1,0 +1,104 @@
+*{
+    margin: 0;
+}
+.container{
+    background-image: url('https://previews.123rf.com/images/ollymolly2015/ollymolly20151801/ollymolly2015180100070/93971740-fondo-del-doodle-de-la-hornada-patr%C3%B3n-sin-costuras-de-vector-con-utensilios-de-cocina-dibujado-a-man.jpg');
+    background-size: contain;
+    /* background-position: center;*/
+    /* background-repeat: no-repeat;  */
+    /* background-color: aquamarine; */
+    /* background-image: url('https://i.pinimg.com/564x/d2/81/20/d28120e17fff92b90f26f88d10ce87dc.jpg'); */
+    /* height: 260vh; */
+    margin: 0;
+    /* background-size: 100% contain; */
+}
+
+.card{
+    text-decoration: none;
+}
+
+.containerCards{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 90%;
+    margin: auto;
+    padding: 50px;
+}
+
+
+.containerBotones{
+    display: flex;
+    float: right;
+}
+
+.crearReceta{
+    text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 10px 30px;
+  transition: 0.5s;
+  position: relative;
+  font-size: 17px;
+  background: #333;
+  border: none;
+  color: #fff;
+}
+
+.crearReceta:hover{letter-spacing: 0.25em;
+  background: #ff1867;
+  color: #ff1867;
+  box-shadow: 0 0 45px #ff1867;}
+
+.btnCargarReceta{
+    text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 10px 30px;
+  transition: 0.5s;
+  position: relative;
+  font-size: 17px;
+  background: #333;
+  border: none;
+  color: #fff;
+}
+/* .containerCards{
+   display: grid;
+    grid-template-columns: 250px 250px 250px;
+    grid-template-rows: 250px 250px 250px;
+    gap: 18px 11px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      ". . ."
+      ". . ."
+      ". . .";
+} */
+/* .containerCards{  
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*  */
+/* } */
+
+
+
+/* .containerBotones{
+    padding: 50px;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+} */
+/* .btnCargarReceta{
+    background-color: brown;
+    color: red;
+} */
+
+/* .containerFiltros{
+    display: block;
+} */
+
+/* .cards{ */
+    /* border: 1px solid black */
+
+/* .cards{
+    display: grid;
+    grid-template-columns: repeat(2, 30px);
+} */

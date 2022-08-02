@@ -3,19 +3,24 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // // importamos actions
-import { getRecipes, filterRecipesByDiets, filterCreated, orderByName, orderByHealthLevel } from "../actions";
+import { getRecipes, filterRecipesByDiets, filterCreated, orderByName, orderByHealthLevel } from "../../actions/index";
+
+import getDetail from "../../actions/index";
 
 // // importacion para renderizar
 import { Link } from "react-router-dom";
 
 // // importo cards
-import Card from "./Cards";
+import Card from "../Cards/Cards";
 
 // importo componente paginado
-import Paginado from "./Pagination";
+import Paginado from "../Pagination/Pagination";
+
+// importo SearchBar
+import SearchBar from "../SearchBar/SearchBar";
 
 // importacion css
-import home from './cssComponents/home.css';
+import home from '../Home/home.module.css';
 
 export default function Home(){
     // declaro la constante dispatch y le pasamos el useDispatch
@@ -92,14 +97,14 @@ export default function Home(){
 
     return (
         <React.Fragment>
-        <div>
-            <div>
-                <h1>Henry Food</h1>
-                <Link to='/recipes'>Crear receta</Link>
+        <div className={home.container}>
+            <h1 className="titulo">Henry Food</h1>
+            <div className={home.containerBotones}>
+                <Link to='/recipes'><button className={home.crearReceta}>Crear receta</button></Link>
                 <br />
-                <button onClick={e => handleClick(e)}>Volver a cargar recetas</button>
+                <button className={home.btnCargarReceta} onClick={e => handleClick(e)}>Volver a cargar recetas</button>
             </div>
-            <div>
+            <div className={home.containerFiltros}>
                 <select name="Asc/Desc" id="" onChange={e => handleSort(e)}>
                     <option value="all">Orden alfabético</option>
                     <option value="asc">Ascendente</option>
@@ -134,24 +139,28 @@ export default function Home(){
                     <option value="created">Creadas</option>
                 </select>
 
-                <Paginado
+                <Paginado 
                     recipesPerPage = { recipesPerPage }
                     allRecipes = {allRecipes.length}
                     paginado = {paginado}
                 />
-            
-                {
-                    currentRecipes?.map((e) => {
-                        return(
-                            <fragment>
-                                <Link to={"/home/" + e.id}>
-                                    <Card name={e.name} diet={e.diet} image={e.image} key={e.id}/>
-                                </Link>
-                            </fragment>
-                        );
-                    })
-                }
 
+                <SearchBar/>
+                <div className={home.containerCards}>
+                    {
+                        currentRecipes?.map((e) => {
+                            return(
+                                <div key={e.id}>
+                                    <div>
+                                        <Link to={`/recipes/${e.id}`} className={home.card}>
+                                            <Card onClick={()=>dispatch(getDetail(e.id))} name={e.name} diet={e.diet + ' '} image={e.image ? e.image : e.img} key={e.id}/>
+                                        </Link>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    }
+                </div>
             </div>
         </div>
         </React.Fragment>

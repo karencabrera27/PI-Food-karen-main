@@ -16,7 +16,7 @@ const router = Router();
 // trae info de la API
 const getApiInfo = async () => {
     try {
-        const infoApi = await axios(`https://api.spoonacular.com/recipes/complexSearch?apiKey=d4a4ee5326a9432291457a6f2131e9ea&addRecipeInformation=true&number=100`)
+        const infoApi = await axios(`https://api.spoonacular.com/recipes/complexSearch?apiKey=c7b52938fb0f4d5ba0cd656849bd6739&addRecipeInformation=true&number=100`)
         const apiData = infoApi.data?.results.map((e)=>{
             return {
                 id: e.id,
@@ -78,6 +78,9 @@ const getAllInfo = async () =>{
     
     // res.send('Hola')
 
+
+    // ruta GET /recipes?name="..."
+
     router.get("/recipes", async(req, res, next)=>{
         try {
             const { name } = req.query
@@ -122,26 +125,26 @@ const getAllInfo = async () =>{
 //     res.send(allDiets);
 // })
 
-// ruta de recetas por id
-
+// RUTA DE RECETAS POR ID -> GET /recipes/{idReceta}:
 // para traer una recet de la base de datos se usa el UUID
 
 router.get('/recipes/:id', async(req, res, next) =>{
     try {
         const { id } = req.params
-        const recetaId = await getAllInfo()
+        const recipesTotal = await getAllInfo()
 
         if (id) {
-            const recipeId = recetaId.filter(el => el.id.toString() === id.toString());
-            if (recipeId.length > 0) res.status(200).send(recipeId)
-            else res.status(404).json("No recipes with that ID" )
+            const recipeId = recipesTotal.filter(el => el.id.toString() === id.toString());
+            recipeId.length ?
+                res.status(200).json(recipeId) :
+                res.status(400).send("Recipe not found")
         }
     } catch (error) {
         next(error)
     }
 })
 
-//  post
+//  RUTA PARA CREAR UNA RECETA  POST /recipe:
 
 router.post('/recipes', async (req, res, next)=> {
     // hago un destructuring y recibe esas variables por body
@@ -218,7 +221,7 @@ router.post('/recipes', async (req, res, next)=> {
 })
 
 
-// ruta de dietas
+// RUTA DE DIETAS GET /types:
 
 // trae la info de la api y lo guarda en la base de datos
 router.get('/diets', async (req, res, next) =>{

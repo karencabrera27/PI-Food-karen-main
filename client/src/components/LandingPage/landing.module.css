@@ -1,0 +1,136 @@
+body{
+    /* background: url(https://i.pinimg.com/564x/14/6d/bd/146dbd8f533a808339ece780f58c8e89.jpg); */
+    /* background-image: url(./menu.jpg); */
+    background-size: 35%;
+    background-repeat: no-repeat;
+    background-position-x: center;
+}
+
+.container{
+    margin: 33%;
+    margin-left: 48%;
+    text-align: center;
+    justify-content: center;
+}
+
+.title{
+    font-size: 30px;
+    font-style:normal ;
+    font-family: cursive;
+    font-weight: bold;
+    text-shadow: rgb(230, 164, 41) 0.1em 0.0em  ;
+    text-align: left;
+    text-shadow: 1px 1px 2px rgb(105, 104, 21), 0 0 1em rgb(233, 214, 104), 0 0 0.2em rgb(212, 224, 99);
+    color: goldenrod;
+}
+
+
+/*,  *'Courier New',
+    'Trebuchet MS' - posible
+    sans-serif; posible
+    , 
+    'Lucida Sans',
+*/
+
+/* .btn{
+    position: relative;
+    margin-left: 10%;
+    font-size: 17px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1em 2.5em;
+    display: inline-block;
+    border-radius: 6em;
+    transition: all .2s;
+    border: none;
+    font-family: cursive;
+    font-weight: bold;
+    color: black;
+    background-color: goldenrod;
+}
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.btn::after {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: all .4s;
+}
+
+.btn::after {
+    background-color: rgb(252, 231, 35);
+}
+.btn:hover::after {
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity: 0;
+} */
+
+.button {
+    position: relative;
+    margin: auto;
+    padding: 12px 18px;
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+}
+
+.button:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    border-radius: 50px;
+    background: #e3e7b1;
+    width: 54px;
+    height: 54px;
+    transition: all 0.3s ease;
+}
+span {
+    position: relative;
+    font-family: "Ubuntu", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #675d23;
+}
+
+svg {
+    position: relative;
+    top: 0;
+    margin-left: 10px;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: #626723;
+    stroke-width: 2;
+    transform: translateX(-5px);
+    transition: all 0.3s ease;
+}
+
+.button:hover:before {
+    width: 100%;
+    background: #e7e3b1;
+}
+
+.button:hover svg {
+    transform: translateX(0);
+}
+
+.button:active {
+    transform: scale(0.95);
+}
+

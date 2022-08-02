@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { getNameRecipes } from "../actions";
+import { getNameRecipes } from "../../actions";
+import s from '../SearchBar/SearchBar.module.css'
 
 export default function SearchBar(){
     // guardo el dispatch en una variable
@@ -25,9 +26,9 @@ export default function SearchBar(){
 
     // renderizado
     return(
-        <div>
-            <input type="text" placeholder="Buscar..." onChange={(e) => handleInputChange(e)}/>
-            <button type="submit" onClick={(e) => handleSubmit(e)}>Buscar</button>
+        <div className={s.botones}>
+            <input className={s.input}type="text" placeholder="Buscar..." onChange={(e) => handleInputChange(e)}/>
+            <button className={s.boton} type="submit" onClick={(e) => handleSubmit(e)}>Buscar</button>
             
         </div>
     )
