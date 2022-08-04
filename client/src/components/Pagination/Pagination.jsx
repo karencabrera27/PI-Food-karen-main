@@ -1,4 +1,5 @@
 import React from "react";
+import p from './Pagination.module.css'
 
 export default function Paginado({ recipesPerPage, allRecipes, paginado}){
     const pageNumbers = [];
@@ -19,7 +20,7 @@ export default function Paginado({ recipesPerPage, allRecipes, paginado}){
                     pageNumbers &&
                     pageNumbers.map(number => {
                         return(
-                            <button onClick={() => paginado(number)}>{number}</button>
+                            <button key={number} className={p.button} onClick={() => paginado(number)}>{number}</button>
                         )
                     })
                 }

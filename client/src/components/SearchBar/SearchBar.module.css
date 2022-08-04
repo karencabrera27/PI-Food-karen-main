@@ -3,7 +3,7 @@
 } */
 
 .input {
-    width: 10%;
+    width: 100px;
     height: 40px;
     line-height: 28px;
     padding: 0 1rem;
@@ -37,3 +37,9 @@
     font-weight: bold;
    }
 
+.botones{
+    position: absolute;
+    top: 5px;
+    left:1020px;
+    width: 300px;
+}

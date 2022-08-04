@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
     healthLevel: {
       type: DataTypes.FLOAT
     },
-    stepByStep: {
+    steps: {
       type: DataTypes.TEXT
     },
     image: {

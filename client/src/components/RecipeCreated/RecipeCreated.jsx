@@ -4,23 +4,56 @@ import { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom'
 
 // actions
-import { getDiets, postRecipes } from "../../actions";
+import { getDiets, postRecipes, getRecipes } from "../../actions";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import crear from '../RecipeCreated/rCreated.module.css';
+import c from '../RecipeCreated/rCreated.module.css';
 
 function validacion(input){
     let error = {};
-    if(!input.name){
+    
+    
+    const regexName = /^[a-zA-Z ]+$/;
+    // comprueba si es url valida
+    const url = /(http[s]*:\/\/)([a-z\-0-9\/.]+).([a-z.]{2,3})\/([a-z0-9-\/._~:?#\[\]@!$&'()*+,;=%]*)([a-z0-9]+\.)(jpg|jpeg|png)/i;
+
+    const checkUndefined = (input)=> {
+        // if(!input.diets.length){
+        //     return true;
+        // } 
+        //comprueba que todos los campos esten llenos
+        for(let i in input ){
+            if(input[i] === undefined){
+                return true;
+            } else{
+                return false;
+            }
+        }
+    }
+    
+    // no permite campos vacios
+    if(checkUndefined(input)){
+        error.allFields = "Todos los campos son obligatorios"
+    }
+    if(!input.name ){
         error.name = "El campo nombre es obligatorio"
-    } 
+    } else if(!regexName.test(input.name)){
+        error.name = "No se aceptan numeros"
+    }
     if(!input.resume){
-        error.resume = "El campo resumen es obligatorio"
+        error.resume = "Es obligatorio colocar un resúmen";
     }
-    if(!input.stepByStep){
-        error.stepByStep = "El campo paso a paso es obligatorio"
+     if(input.healthLevel < 10){
+        error.healthLevel = "El nivel de saludable debe ser mayor a 10";
+    } 
+    if(!input.steps){
+        error.steps = "Este campo es obligatorio";
     }
+    // el test sirve para comprobar que haya un escritura dentro del input
+    // if(input.image && !url.test(input.image)){
+    //     error.url = "Imagen no valida"
+    // }
 
     return error;
 }
@@ -28,10 +61,12 @@ function validacion(input){
 export default function RecipeCreated(){
     const dispatch = useDispatch();
 // traigo el estado
-    const diets = useSelector((state) => state.diets)
+    const recipesCopy = useSelector((state) => state.copyAllRecipes)
 
 // genero un estado para validación
-    const [ error, setError] = useState({});
+    const [ error, setError] = useState({
+        allFields: "Todos los campos son obligatorios"
+    });
 
 // traigo el use history
     const history = useHistory();
@@ -40,15 +75,16 @@ export default function RecipeCreated(){
     const [ input, setInput ] = useState({
         name: "",
         resume: "",
-        healthScore: "",
-        stepByStep: "",
+        healthLevel: "",
+        steps: "",
         image: "",
-        diet: []
+        diets: []
     })
 
     
     useEffect(() =>{
         dispatch(getDiets())
+        dispatch(getRecipes())
     }, [])
 
     function handleChange(e){
@@ -75,14 +111,25 @@ export default function RecipeCreated(){
             setInput({
                 ...input,
                 // como son muchos, le paso lo que ya había primero y concatena el target value
-                diet: [...input.diet, e.target.value]
+                diets: [...input.diets, e.target.value]
+            })
+        } else{
+            setInput({
+                ...input,
+                diets: input.diets.filter((r)=> r !== e.target.value)
             })
         }
     }
 
     function handleSubmit(e){
+        const nameRepeat = recipesCopy.filter((d) => d.name === input.name)
+        if(nameRepeat.length){
+            e.preventDefault()
+            alert("La receta ya existe")
+        } else{
         e.preventDefault();
         console.log(input)
+        
         // despacho la acción
         dispatch(postRecipes(input))
         alert('Receta creada')
@@ -90,102 +137,115 @@ export default function RecipeCreated(){
         setInput({
             name: "",
             resume: "",
-            healthScore: "",
+            healthLevel: "",
             stepBystep: "",
             image: "",
-            diet: []
+            diets: []
             })
         // redirecciona al home
         history.push('/home')
+        }
     }
+
     // 
     
 
     return(
         <React.Fragment>
-            <div className="container">
-                <Link to = '/home'><button className={crear.boton}>Volver</button></Link>
-                <h1 className={crear.titulo}>Crear receta</h1>
+            <div className={c.container}>
+                <Link to = '/home'><button className={c.boton}>Volver</button></Link>
+                <h1 className={c.titulo}>Crear receta</h1>
 
-                <form onSubmit={(e)=>handleSubmit(e)} className={crear.formulario} >
-                    <div className={crear.contNombre}>
-                        <label htmlFor="">Nombre</label>
+                <form onSubmit={(e)=>handleSubmit(e)} className={c.formulario} >
+                    <div className={c.labelInput}>
+                        <label key="" className={c.label}>Nombre: </label>
                         <input 
                             type="text" 
                             value={input.name} 
                             name="name" 
+                            
                             onChange={(e) => handleChange(e)}
+                            className={c.input}
                         />
-                        {error.name && (<p className={crear.error}>{error.name}</p>)}
+                        <span>{error.name && (<p className={c.error}>{error.name}</p>)}</span>
                     </div>
-                    <div className={crear.contResumen}>
-                        <label htmlFor="">Resumen</label>
+                    <div className={c.labelInput}>
+                        <label key="" className={c.label}>Resumen: </label>
                         <textarea 
                             value={input.resume} 
                             name="resume" 
                             onChange={(e)=>handleChange(e)}
+                            className={c.input}
                         />
-                        {error.name && (<p className={crear.error}>{error.name}</p>)}
+                        <span>{error.resume && (<p className={c.error}>{error.resume}</p>)}</span>
                     </div>
-                    <div className={crear.contSalud}>
-                        <label htmlFor="">Nivel de salud</label>
+                    <div className={c.labelInput}>
+                        <label key="" className={c.label}>Nivel de salud: </label>
                         <input 
-                            type="text" 
-                            value={input.healthScore} 
-                            name="healthScore" 
+                            type="number" 
+                            value={input.healthLevel} 
+                            name="healthLevel" 
                             onChange={(e)=>handleChange(e)}
+                            className={c.input}
                         />
+                        <span>{error.resume && (<p className={c.error}>{error.healthLevel}</p>)}</span>
                     </div>
-                    <div className={crear.contPasos}>
-                        <label htmlFor="">Paso a paso</label>
+                    <div className={c.labelInput}>
+                        <label key="" className={c.label}>Paso a paso: </label>
                         <textarea 
-                            value={input.stepByStep} 
-                            name="stepByStep" 
+                            value={input.steps} 
+                            name="steps" 
                             onChange={(e)=>handleChange(e)}
+                            className={c.input}
                         />
-                        {error.name && (<p className={crear.error}>{error.name}</p>)}
+                        <span>{error.steps && (<p className={c.error}>{error.steps}</p>)}</span>
                     </div>
-                    <div className={crear.contImagen}>
-                        <label htmlFor="">Imagen</label>
+                    <div className={c.labelInput}>
+                        <label key="imgInput" className={c.label}>Imagen: </label>
                         <input 
                             type="text" 
                             value={input.image} 
                             name="image" 
+                            id="imgInput"
                             onChange={(e)=>handleChange(e)}
+                            className={c.input}
                         />
+                        {/* <span>{error.url && (<p className={c.error}>{error.url}</p>)}</span> */}
                     </div>
-                    <div className={crear.contDietas}>
-                        <label htmlFor="" >Dietas</label>
+                    <div className={c.contDietas}>
+                        <label key="" className={c.label}>Dietas</label>
                         <br></br>
-                        <label htmlFor="">Sin gluten</label>
+                        <div className={c.dietas}>
+                        <label key="" className={c.labels}>Sin gluten</label>
                         <input 
                             type="checkbox" 
                             value="gluten free" 
                             name="gluten free" 
                             onChange={(e)=>handleCheck(e)}
+                            
                         />
-                        <label htmlFor="">Vegetariano</label>
+                        <label key="" className={c.labels}>Vegetariano</label>
                         <input 
                             type="checkbox" 
                             value="vegetarian" 
                             name="vegetarian" 
                             onChange={(e)=> handleCheck(e)}
                         />
-                        <label htmlFor="">Lacto vegetariana</label>
+                        <label key="" className={c.labels}>Lacto vegetariana</label>
                         <input 
                             type="checkbox" 
                             value="dairy free" 
                             name="dairy free" 
                             onChange={(e)=> handleCheck(e)}
                         />    
-                        <label htmlFor="">Ovo vegetariano</label>
+                        <label key="" className={c.labels}>Ovo vegetariano</label>
                         <input 
                             type="checkbox" 
                             value="lacto ovo vegetarian" 
                             name="lacto ovo vegetarian" 
                             onChange={(e)=> handleCheck(e)}
                         />
-                        <label htmlFor="">
+                        <label key="" className={c.labels}>
                             Vegana</label>
                             <input 
                                 type="checkbox" 
@@ -194,7 +254,7 @@ export default function RecipeCreated(){
                                 onChange={(e)=> handleCheck(e)}
                             />
                         
-                        <label htmlFor="">
+                        <label key="" className={c.labels}>
                             Paleo
                             <input 
                                 type="checkbox" 
@@ -203,7 +263,7 @@ export default function RecipeCreated(){
                                 onChange={(e)=> handleCheck(e)}
                             />
                         </label>
-                        <label htmlFor="">
+                        <label key="" className={c.labels}>
                             Primitiva
                             <input 
                                 type="checkbox" 
@@ -213,7 +273,7 @@ export default function RecipeCreated(){
                                 handleCheck(e)}
                             />
                         </label>
-                        <label htmlFor="">
+                        <label key="" className={c.labels}>
                             Entero 30
                             <input 
                                 type="checkbox" 
@@ -222,7 +282,7 @@ export default function RecipeCreated(){
                                 onChange={(e)=> handleCheck(e)}
                             />
                         </label>
-                        <label htmlFor="">
+                        <label key="" className={c.labels}>
                             FODMAP bajo
                             <input 
                                 type="checkbox" 
@@ -231,7 +291,7 @@ export default function RecipeCreated(){
                                 onChange={(e)=> handleCheck(e)}
                             />
                         </label>
-                        <label htmlFor="">
+                        <label key="" className={c.labels}>
                             Pescetariano
                             <input 
                                 type="checkbox" 
@@ -240,7 +300,7 @@ export default function RecipeCreated(){
                                 onChange={(e)=> handleCheck(e)}
                             />
                         </label>
-                        <label htmlFor="">
+                        <label key="" className={c.labels}>
                             Cetogénico
                             <input 
                                 type="checkbox" 
@@ -249,9 +309,17 @@ export default function RecipeCreated(){
                                 onChange={(e)=> handleCheck(e)}
                             />
                         </label>
+                        </div>
                     </div>
-
-                    <button type='submit'>Submit</button>
+                    {
+                        Object.keys(error).length ? (
+                            <button type='submit' disabled={true} className={c.botonSubmit}>Submit</button>
+                        ) :
+                        (
+                            <button type='submit'  className={c.botonSubmit}>Submit</button>
+                        )
+                    }
+                    
                 </form>
             </div>
         </React.Fragment>

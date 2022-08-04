@@ -40,7 +40,7 @@ export default function rootReducer(state = initialState, action){
             }
         case 'FILTER_BY_DIETS':
             const allRecipes = state.copyAllRecipes;
-            const dietFilter = action.payload === "all" ? allRecipes : allRecipes.filter(e => e.diet?.some(d => d === action.payload))
+            const dietFilter = action.payload === "all" ? allRecipes : allRecipes.filter(e => e.diets?.some(d => d === action.payload))
             return {
                 ...state,
                 recipes: dietFilter
@@ -109,6 +109,13 @@ export default function rootReducer(state = initialState, action){
                 ...state,
                 recipes: sortAr
             }
+        case 'CLEAR':
+            return{
+                ...state,
+                detail: action.payload
+            }
+            
+        
         
         default:
             return {...state}

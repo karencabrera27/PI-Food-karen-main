@@ -19,11 +19,19 @@
 } */
 
 .card {
-  width: 350px;
- height: 400px;
+  width: 400px;
+ height: 450px;
  background: white;
- border-radius: 10px;
+ border-radius: 20px;
  transition: border-radius 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+ position: relative;
+ }
+
+ .contDiet{
+  
+
+  height: 100px;
+  
  }
  
  .card:hover {
@@ -43,12 +51,18 @@
     font-size: 26px;
     text-transform: uppercase;
     margin-top: 20px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .diet{
-  font-size: 20px;
+  font-size: 12px;
   color: black;
   margin: 10px;
+  text-align: center;
+
 }
 
 .img{
@@ -56,6 +70,7 @@
   width: 200px;
   height: 200px;
   border-radius: 150px;
-  padding-top: 10px;
-  bottom: 30px;
+  left: 100px;
+  bottom: 70px;
+  position: absolute;
 }

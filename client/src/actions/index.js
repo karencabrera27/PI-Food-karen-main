@@ -1,8 +1,5 @@
 import axios from 'axios';
 
-export const GET_RECIPES = "GET_RECIPES";
-export const FILTER_BY_DIETS = "FILTER_BY_DIETS";
-export const FILTER_CREATED = "FILTER_CREATED";
 
 // Obtener todas las dietas
 export function getRecipes(){
@@ -71,21 +68,9 @@ export function getNameRecipes(name){
             alert("Receta inexistente")
         }
     }
-    // return async function(dispatch){
-    //     try {
-    //         var json = axios.get('localhost:3001/recipes?name=' + name)
-    //         // despacho la acción
-    //         return dispatch({
-    //             type: 'GET_NAME_RECIPE',
-    //             payload: json.data
-    //         })
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
 }
 
-// acción que despacha la ruta de dietas
+//  despacha la ruta de dietas
 
 export function getDiets(){
     return async function(dispatch){
@@ -102,9 +87,12 @@ export function getDiets(){
 }
 
 export default function getDetail(id){
+    // 
     return async function(dispatch){
+        console.log(getDetail, "action")
         try {
             const detalle = await axios.get(`http://localhost:3001/recipes/${id}`)
+            console.log(detalle.data, "data")
             return dispatch({
                 type: "GET_DETAILS",
                 payload: detalle.data
@@ -113,6 +101,7 @@ export default function getDetail(id){
             console.log(error)
         } 
     }
+    
 }
 
 // post recetas
@@ -125,6 +114,13 @@ export function postRecipes(payload){
     }
 }
 
+
+export function clear(){
+    return {
+        type: 'CLEAR',
+        payload: []
+    }
+}
 
 //     return async function(dispatch){
 // //     //     // creo una variable la cual tiene la ruta del get para obtener todas las recetas

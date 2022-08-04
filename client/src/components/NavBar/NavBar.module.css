@@ -1,0 +1,8 @@
+.container{
+    background-color: aqua;
+}
+
+.containerBotones{
+    display: flex;
+    justify-content: center;
+}

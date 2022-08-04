@@ -19,8 +19,12 @@ import Paginado from "../Pagination/Pagination";
 // importo SearchBar
 import SearchBar from "../SearchBar/SearchBar";
 
+import RecipeCreated from "../RecipeCreated/RecipeCreated";
+
 // importacion css
 import home from '../Home/home.module.css';
+
+import loader from './loader.gif'
 
 export default function Home(){
     // declaro la constante dispatch y le pasamos el useDispatch
@@ -29,7 +33,7 @@ export default function Home(){
 
     // esta const trae todo lo que esta en el estado de recipes
     const allRecipes = useSelector((state) => state.recipes);
-
+   
     // definición de estado para ordenamiento
     const [orden, setOrden] = useState('');
 
@@ -57,6 +61,7 @@ export default function Home(){
         // esto es lo mismo que hacer el mao dispatch to props
         // esto reemplaza todo el map state to props
             dispatch(getRecipes())
+            
         }, [dispatch]
     ) // el arreglo qe se le pasa como sdo param es pra q no se genere un loop infinito
 
@@ -72,12 +77,18 @@ export default function Home(){
     // función filtro por dietas
     function handleFilterDiets(e){
         // el e.target.value es lo mismo que el payload, es decir cada una de las opciones
+        e.preventDefault()
         dispatch(filterRecipesByDiets(e.target.value))
+        setCurrentPage(1)
+        setOrden(`Ordenado ${e.target.value}`)
     }
 
     // función filtro recetas creadas
     function handleFilterCreated(e){
+        e.preventDefault()
         dispatch(filterCreated(e.target.value))
+        setCurrentPage(1)
+        setOrden(`Ordenado ${e.target.value}`)
     }
     // función ordenamiento alfabético asc/desc 
     function handleSort(e){
@@ -95,31 +106,41 @@ export default function Home(){
         setOrden(`Ordenado ${e.target.value}`)
     }
 
+    // borrar una card
+    function handleDelete(){
+        
+    }
+
     return (
         <React.Fragment>
+        
+            
         <div className={home.container}>
+            
             <h1 className="titulo">Henry Food</h1>
+            <div className={home.container2}>
             <div className={home.containerBotones}>
-                <Link to='/recipes'><button className={home.crearReceta}>Crear receta</button></Link>
+                <Link to='/recipes' className={home.crearReceta}>Crear receta</Link>
                 <br />
+
                 <button className={home.btnCargarReceta} onClick={e => handleClick(e)}>Volver a cargar recetas</button>
             </div>
-            <div className={home.containerFiltros}>
-                <select name="Asc/Desc" id="" onChange={e => handleSort(e)}>
-                    <option value="all">Orden alfabético</option>
+            <div className={home.filtros}><label className={home.filtros}>Order alfabético</label>
+                <select className={home.select} name="Asc/Desc" id="" onChange={e => handleSort(e)}>
+                    <option value="all">All</option>
                     <option value="asc">Ascendente</option>
                     <option value="desc">Descendente</option>
                 </select>
-
-                <select name="Asc/Desc" id="" onChange={e => handleSortHealthLevel(e)}>
-                    <option value="all">Nivel de salud</option>
+                <label className={home.filtros}>Nivel de salud</label>
+                <select className={home.select} name="Asc/Desc" id="" onChange={e => handleSortHealthLevel(e)}>
+                    <option value="all">All</option>
                     <option value="asc">Ascendente</option>
                     <option value="desc">Descendente</option>
                 </select>
-
-                <select name="" id="" onChange={e => handleFilterDiets(e)} className={home.cardRecipe}>
+                <label className={home.filtros}>Dietas</label>
+                <select className={home.select} name="" id="" onChange={e => handleFilterDiets(e)}>
                     {/* el value es lo mismo que el e.target.value */}
-                    <option value="all">Dietas</option>
+                    <option value="all">All</option>
                     <option value="gluten free">Gluten free</option>
                     <option value="vegan">Vegan</option>
                     <option value="lacto ovo vegetarian">Lacto ovo vegetarian</option>
@@ -132,12 +153,16 @@ export default function Home(){
                     <option value="pescatarian">Pescatarian</option>
                     <option value="ketogenic">Ketogenic</option>
                 </select>
-
-                <select name="" id="" onChange={e => handleFilterCreated(e)}>
+                <label className={home.filtros}>Creacion</label>
+                <select className={home.select} name="" id="" onChange={e => handleFilterCreated(e)}>
                     <option value="all">Todas las recetas de la DB</option>
                     <option value="current">Existentes</option>
                     <option value="created">Creadas</option>
                 </select>
+            </div>
+            </div>
+            <div className={home.containerFiltros}>
+                
 
                 <Paginado 
                     recipesPerPage = { recipesPerPage }
@@ -145,21 +170,36 @@ export default function Home(){
                     paginado = {paginado}
                 />
 
-                <SearchBar/>
+                <SearchBar
+                    setCurrentPage={setCurrentPage}
+                />
                 <div className={home.containerCards}>
                     {
-                        currentRecipes?.map((e) => {
+                        currentRecipes.length? (currentRecipes.map((e) => {
                             return(
                                 <div key={e.id}>
-                                    <div>
+                                   
                                         <Link to={`/recipes/${e.id}`} className={home.card}>
-                                            <Card onClick={()=>dispatch(getDetail(e.id))} name={e.name} diet={e.diet + ' '} image={e.image ? e.image : e.img} key={e.id}/>
+                                            <Card onClick={()=>dispatch(getDetail(e.id))} name={e.name} diets={e.diets} image={e.image ? e.image : e.img} key={e.id}/>
                                         </Link>
-                                    </div>
+                                    
                                 </div>
                             );
                         })
-                    }
+                    )  : (
+                        <div className={home.contLoader}>
+                            <div className={home.spinner}>
+                    <span className={home.span}>L</span>
+                    <span className={home.span}>O</span>
+                    <span className={home.span}>A</span>
+                    <span className={home.span}>D</span>
+                    <span className={home.span}>I</span>
+                    <span className={home.span}>N</span>
+                    <span className={home.span}>G</span>
+                  </div>
+                        </div>
+                    )
+                }
                 </div>
             </div>
         </div>

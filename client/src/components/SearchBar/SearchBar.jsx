@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { getNameRecipes } from "../../actions";
 import s from '../SearchBar/SearchBar.module.css'
 
-export default function SearchBar(){
+export default function SearchBar({ setCurrentPage }){
     // guardo el dispatch en una variable
     const dispatch = useDispatch();
     // creo estados locales y los seteo en un string vacío
@@ -22,6 +22,7 @@ export default function SearchBar(){
     function handleSubmit(e){
         e.preventDefault();
         dispatch(getNameRecipes(name))
+        setCurrentPage(1)
     }
 
     // renderizado

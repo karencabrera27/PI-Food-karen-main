@@ -16,16 +16,16 @@ const router = Router();
 // trae info de la API
 const getApiInfo = async () => {
     try {
-        const infoApi = await axios(`https://api.spoonacular.com/recipes/complexSearch?apiKey=c7b52938fb0f4d5ba0cd656849bd6739&addRecipeInformation=true&number=100`)
+        const infoApi = await axios(`https://api.spoonacular.com/recipes/complexSearch?apiKey=a9880b090b1849d79a3cc09f56d73ae8&addRecipeInformation=true&number=100`)
         const apiData = infoApi.data?.results.map((e)=>{
             return {
                 id: e.id,
                 name: e.title,
                 resume: e.summary,
                 healthLevel: e.healthScore,
-                image: e.image,
+                image: e.image || "https://saboryestilo.com.mx/wp-content/uploads/2020/01/tips-para-hacer-la-mejor-carne-asada-1200x900.jpg",
                 steps: (e.analyzedInstructions[0] && e.analyzedInstructions[0].steps? e.analyzedInstructions[0].steps.map(s => s.step).join(" \n"):''),
-                diet: e.diets
+                diets: e.diets
             }
         })
         return apiData
@@ -38,7 +38,7 @@ const getApiInfo = async () => {
     const getDbInfo = async () =>{
         return await Recipe.findAll({
             include:{
-                as: "diets",
+                
                 model: Diet,
                 attributes: ["name"],
                 through: {
@@ -58,28 +58,7 @@ const getAllInfo = async () =>{
     return infoTotal //arreglo
 }
 
-// router.get('/recipes', async (req, res) => {
-    // busca un name por query
-    // const name = req.query.name;
 
-    // llama a la funcion de arriba
-    // let recipesTotal = await getAllRecipe();
-
-
-    // if(name){
-    //     // hace un filtrado 
-    //     let recipeName = await recipesTotal.filter(e => e.name.toLowerCase().includes(name.toLowerCase()));
-    //     recipeName.length ?
-    //     res.status(200).send(recipeName) :
-    //     res.status(404).send('No se encontró la receta');
-    // } else{
-    //     res.status(200).send(recipesTotal)
-    // }
-    
-    // res.send('Hola')
-
-
-    // ruta GET /recipes?name="..."
 
     router.get("/recipes", async(req, res, next)=>{
         try {
@@ -151,7 +130,7 @@ router.post('/recipes', async (req, res, next)=> {
     // estos datos los saco del modelo
 
     try{
-        const { name, resume, healthLevel, stepByStep, image, diet } = req.body
+        const { name, resume, healthLevel, steps, image, diets } = req.body
         // let id = Math.floor(Math.random()*12345)
         const recetaCreada = await Recipe.create({ 
             // no le paso diet porque hay que hacer la relacion aparte
@@ -159,16 +138,17 @@ router.post('/recipes', async (req, res, next)=> {
              name,
              resume,
              healthLevel,
-             stepByStep,
-             image
+             steps,
+             image: image || "https://saboryestilo.com.mx/wp-content/uploads/2020/01/tips-para-hacer-la-mejor-carne-asada-1200x900.jpg"
         })
         const dietDb = await Diet.findAll({
             // se debe encontrar en el modelo diet 
             // donde el name sea igual a diet que llega por body
             where:{
-                name: diet
+                name: diets
             }
         })
+        console.log(dietDb);
         // a la receta creada se le agrega la dieta
         await recetaCreada.addDiet(dietDb);
         
@@ -183,7 +163,7 @@ router.post('/recipes', async (req, res, next)=> {
     //     "name": "Chipa",
     //     "resume": "Designa genéricamente a un conjunto de tortas de diverso tipo que tienen al maíz o al almidón de mandioca como base de preparación y que forman parte del denominado «tyra», término guaraní que sirve para designar todo alimento que se consume para acompañar el mate cocido, la leche o el café",
     //     "healthLevel": 62,
-    //     "stepByStep": "Cortar el queso en cubos pequeños. Los pueden rallar si prefieren o procesar. Como más les gusta. Reservar. Derretir la manteca y agregar los huevos y la sal. Mezclar bien. Calentar la leche y reservar. En un bol colocar el almidón de mandioca y hacer un huevo en el centro. Verter la mezcla de manteca/huevo/sal y usando una cuchara de madera o una espátula mezclar lentamente desde el centro e ir incorporando el almidón de a poco. Agregar mitad del queso y la mitad de la leche y continúen mezclando. Va a ser cada vez más difícil de mezclar, pero persistan. Una vez incorporados el queso y la leche a la masa agregar lo que queda y continuar mezclando con la cuchara/ espátula hasta que los líquidos estén bien incorporados. Ahora pueden terminar de trabajar la masa con las manos (en el bol o la mesada como prefieran). Después de unos minutos se va a formar una masa lisa y uniforme. Sean pacientes, No agreguen liquido extra, incluso cuando piensen que la masa lo necesita. No se tienten.",
+    //     "steps": "Cortar el queso en cubos pequeños. Los pueden rallar si prefieren o procesar. Como más les gusta. Reservar. Derretir la manteca y agregar los huevos y la sal. Mezclar bien. Calentar la leche y reservar. En un bol colocar el almidón de mandioca y hacer un huevo en el centro. Verter la mezcla de manteca/huevo/sal y usando una cuchara de madera o una espátula mezclar lentamente desde el centro e ir incorporando el almidón de a poco. Agregar mitad del queso y la mitad de la leche y continúen mezclando. Va a ser cada vez más difícil de mezclar, pero persistan. Una vez incorporados el queso y la leche a la masa agregar lo que queda y continuar mezclando con la cuchara/ espátula hasta que los líquidos estén bien incorporados. Ahora pueden terminar de trabajar la masa con las manos (en el bol o la mesada como prefieran). Después de unos minutos se va a formar una masa lisa y uniforme. Sean pacientes, No agreguen liquido extra, incluso cuando piensen que la masa lo necesita. No se tienten.",
     //     "image": "https://cdn.cookwithbelula.com/receta/chipas/chipas-0.webp",
     //     "diet": ["gluten fre"]
     // }
@@ -192,7 +172,7 @@ router.post('/recipes', async (req, res, next)=> {
     //     resume,
     //     healthLevel,
     //     image,
-    //     stepByStep,
+    //     steps,
     //     createdInDb,
     //     diet
     // } = req.body;
@@ -203,7 +183,7 @@ router.post('/recipes', async (req, res, next)=> {
     //     resume,
     //     healthLevel,
     //     image,
-    //     stepByStep,
+    //     steps,
     //     createdInDb
     // })
     // // relacion
@@ -231,12 +211,12 @@ router.get('/diets', async (req, res, next) =>{
 
     try {
         // recorre todo el arreglo con el forEach
-        tipoDeDietas.forEach(diet =>{
+        tipoDeDietas.forEach(diets =>{
             // busca o crea en el modelo Diet
             Diet.findOrCreate({
                 where: {
                     // con este nombre
-                    name: diet
+                    name: diets
                 }
             })
         })
@@ -244,7 +224,7 @@ router.get('/diets', async (req, res, next) =>{
         res.status(200).send(dietas)
     } catch (error) {
         next(error)
-    }
+}
 
 
 })
