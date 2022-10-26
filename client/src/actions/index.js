@@ -3,10 +3,9 @@ import axios from 'axios';
 
 // Obtener todas las dietas
 export function getRecipes(){
-// devuelve una función asíncrona que recibe como parámetro el dislpatch
 
     return function(dispatch){
-        axios.get(`http://localhost:3001/recipes`)
+        axios.get(`/recipes`)
         .then(recetas =>
             dispatch({
                 type: "GET_RECIPES",
@@ -59,7 +58,7 @@ export function orderByHealthLevel(payload){
 export function getNameRecipes(name){
     return async function(dispatch){
         try {
-            const busqueda = await axios.get(`http://localhost:3001/recipes?name=${name}`)
+            const busqueda = await axios.get(`/recipes?name=${name}`)
             return dispatch({
                 type: 'SEARCH_RECIPE',
                 payload: busqueda.data
@@ -75,7 +74,7 @@ export function getNameRecipes(name){
 export function getDiets(){
     return async function(dispatch){
         try {
-            const dieta = axios.get(`http://localhost:3001/diets`)
+            const dieta = axios.get(`/diets`)
             return dispatch({
                 type: 'GET_DIET',
                 payload: dieta.data
@@ -85,13 +84,13 @@ export function getDiets(){
         }
     }
 }
-
+// obtener detalles
 export default function getDetail(id){
     // 
     return async function(dispatch){
         console.log(getDetail, "action")
         try {
-            const detalle = await axios.get(`http://localhost:3001/recipes/${id}`)
+            const detalle = await axios.get(`/recipes/${id}`)
             console.log(detalle.data, "data")
             return dispatch({
                 type: "GET_DETAILS",
@@ -108,56 +107,16 @@ export default function getDetail(id){
 
 export function postRecipes(payload){
     return async function(dispatch){
-        const post = await axios.post('http://localhost:3001/recipes', payload)
+        const post = await axios.post(`/recipes`, payload)
         console.log(post)
         return post
     }
 }
 
-
+// limpiar
 export function clear(){
     return {
         type: 'CLEAR',
         payload: []
     }
 }
-
-//     return async function(dispatch){
-// //     //     // creo una variable la cual tiene la ruta del get para obtener todas las recetas
-// //     //     // aca sucede toda la conexión entre el front y el back
-//         var json = await axios.get('https://localhost:3001/recipes', {
-
-//         });
-
-//         return dispatch({
-//             type: GET_RECIPES,
-//             payload: json.data
-//         })
-//     }
-//     return function(dispatch){
-//         axios.get(`http://localhost:3001/recipes`)
-//        .then(recetas =>
-//            dispatch({
-//                type: "GET_RECIPES",
-//                payload: recetas.data
-//            })
-//        )
-//        .catch(error => console.log(error))
-//    }
-
-// detalles
-
-// export default function getDetail(id){
-//     return async function(dispatch){
-//         try {
-//             var json = await axios.get('http://localhost:3001/recipes/' + id)
-//             return dispatch({
-//                 type: 'GET_DETAILS',
-//                 payload: json.data
-//             })
-            
-//         } catch (error) {
-//             console.log(error)
-//         }
-//     }
-// }

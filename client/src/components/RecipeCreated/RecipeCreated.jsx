@@ -12,17 +12,11 @@ import c from '../RecipeCreated/rCreated.module.css';
 
 function validacion(input){
     let error = {};
-    
-    
+
     const regexName = /^[a-zA-Z ]+$/;
-    // comprueba si es url valida
-    const url = /(http[s]*:\/\/)([a-z\-0-9\/.]+).([a-z.]{2,3})\/([a-z0-9-\/._~:?#\[\]@!$&'()*+,;=%]*)([a-z0-9]+\.)(jpg|jpeg|png)/i;
 
     const checkUndefined = (input)=> {
-        // if(!input.diets.length){
-        //     return true;
-        // } 
-        //comprueba que todos los campos esten llenos
+        
         for(let i in input ){
             if(input[i] === undefined){
                 return true;
@@ -44,15 +38,11 @@ function validacion(input){
     if(!input.resume){
         error.resume = "Es obligatorio colocar un resúmen";
     }
-     if(input.healthLevel < 10){
-        error.healthLevel = "El nivel de saludable debe ser mayor a 10";
-    } 
-    if(!input.steps){
-        error.steps = "Este campo es obligatorio";
-    }
-    // el test sirve para comprobar que haya un escritura dentro del input
-    // if(input.image && !url.test(input.image)){
-    //     error.url = "Imagen no valida"
+    //  if(input.healthLevel < 10){
+    //     error.healthLevel = "El nivel de saludable debe ser mayor a 10";
+    // } 
+    // if(!input.steps){
+    //     error.steps = "Este campo es obligatorio";
     // }
 
     return error;
@@ -75,25 +65,22 @@ export default function RecipeCreated(){
     const [ input, setInput ] = useState({
         name: "",
         resume: "",
-        healthLevel: "",
-        steps: "",
-        image: "",
+        // healthLevel: "",
+        // steps: "",
+        // image: "",
         diets: []
     })
 
     
     useEffect(() =>{
         dispatch(getDiets())
-        dispatch(getRecipes())
+        // dispatch(getRecipes())
     }, [])
 
     function handleChange(e){
-        // va guardando todo lo que el usuario escribe, en el estado input
+        
         setInput({
-            //trae todo lo que ya tenia
             ...input,
-            // setea el e.target.name en e.target.value
-            // este name hace referencia al tag input
             [e.target.name] : e.target.value
 
         })
@@ -105,12 +92,11 @@ export default function RecipeCreated(){
     }
 
     function handleCheck(e){
-        // si está marcado el input
+        
         if(e.target.checked){
-            // setea el estado
+            
             setInput({
                 ...input,
-                // como son muchos, le paso lo que ya había primero y concatena el target value
                 diets: [...input.diets, e.target.value]
             })
         } else{
@@ -130,10 +116,9 @@ export default function RecipeCreated(){
         e.preventDefault();
         console.log(input)
         
-        // despacho la acción
         dispatch(postRecipes(input))
         alert('Receta creada')
-        // vacio mi estado
+
         setInput({
             name: "",
             resume: "",
@@ -146,9 +131,6 @@ export default function RecipeCreated(){
         history.push('/home')
         }
     }
-
-    // 
-    
 
     return(
         <React.Fragment>
@@ -210,12 +192,18 @@ export default function RecipeCreated(){
                             onChange={(e)=>handleChange(e)}
                             className={c.input}
                         />
-                        {/* <span>{error.url && (<p className={c.error}>{error.url}</p>)}</span> */}
+                        
                     </div>
                     <div className={c.contDietas}>
                         <label key="" className={c.label}>Dietas</label>
                         <br></br>
-                        <div className={c.dietas}>
+                        <select name="" id="">
+                            {/* getDiets.length ? getDiets.map((d) =>{ */}
+                                {/* return */}
+                            {/* }) */}
+                        </select>
+
+                        {/* <div className={c.dietas}>
                         <label key="" className={c.labels}>Sin gluten</label>
                         <input 
                             type="checkbox" 
@@ -309,7 +297,7 @@ export default function RecipeCreated(){
                                 onChange={(e)=> handleCheck(e)}
                             />
                         </label>
-                        </div>
+                        </div> */}
                     </div>
                     {
                         Object.keys(error).length ? (

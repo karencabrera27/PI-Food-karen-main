@@ -3,9 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import axios from 'axios'
 
 import { Provider } from 'react-redux';
 import { store } from './store/index';
+
+axios.defaults.baseURL = process.env.REACT_APP_API || "http://localhost:3001/";
 
 ReactDOM.render(
   <Provider store = {store}>

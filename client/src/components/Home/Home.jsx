@@ -2,36 +2,30 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-// // importamos actions
+
 import { getRecipes, filterRecipesByDiets, filterCreated, orderByName, orderByHealthLevel } from "../../actions/index";
 
 import getDetail from "../../actions/index";
 
-// // importacion para renderizar
+
 import { Link } from "react-router-dom";
 
-// // importo cards
+
 import Card from "../Cards/Cards";
 
-// importo componente paginado
 import Paginado from "../Pagination/Pagination";
 
-// importo SearchBar
+
 import SearchBar from "../SearchBar/SearchBar";
 
-import RecipeCreated from "../RecipeCreated/RecipeCreated";
-
-// importacion css
 import home from '../Home/home.module.css';
 
-import loader from './loader.gif'
+
 
 export default function Home(){
-    // declaro la constante dispatch y le pasamos el useDispatch
-    // esto va a permitir usar la const y depacharlo en acciones
+   
     const dispatch = useDispatch();
 
-    // esta const trae todo lo que esta en el estado de recipes
     const allRecipes = useSelector((state) => state.recipes);
    
     // definición de estado para ordenamiento
@@ -57,26 +51,20 @@ export default function Home(){
 
     useEffect(
         () => {
-        // despacho las acciones siempre invocando la funcion
-        // esto es lo mismo que hacer el mao dispatch to props
-        // esto reemplaza todo el map state to props
             dispatch(getRecipes())
             
         }, [dispatch]
-    ) // el arreglo qe se le pasa como sdo param es pra q no se genere un loop infinito
+    ) 
 
     
     // funcion para el boton
     function handleClick(e){
-        // pasamos un evento
-        // para que no se rompa todo
         e.preventDefault();
-        // esto resetea
         dispatch(getRecipes());
     }
     // función filtro por dietas
     function handleFilterDiets(e){
-        // el e.target.value es lo mismo que el payload, es decir cada una de las opciones
+        
         e.preventDefault()
         dispatch(filterRecipesByDiets(e.target.value))
         setCurrentPage(1)
@@ -106,11 +94,6 @@ export default function Home(){
         setOrden(`Ordenado ${e.target.value}`)
     }
 
-    // borrar una card
-    function handleDelete(){
-        
-    }
-
     return (
         <React.Fragment>
         
@@ -123,7 +106,7 @@ export default function Home(){
                 <Link to='/recipes' className={home.crearReceta}>Crear receta</Link>
                 <br />
 
-                <button className={home.btnCargarReceta} onClick={e => handleClick(e)}>Volver a cargar recetas</button>
+                <Link to= '/home'className={home.crearReceta} onClick={e => handleClick(e)}>Volver a cargar recetas</Link>
             </div>
             <div className={home.filtros}><label className={home.filtros}>Order alfabético</label>
                 <select className={home.select} name="Asc/Desc" id="" onChange={e => handleSort(e)}>
